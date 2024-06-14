@@ -1,0 +1,7 @@
+creds.env
+geckodriver.log
+most_recent_liked_tweet.txt
+recent_likes.txt
+screenshots/
+.DS_Store
+__pycache__
