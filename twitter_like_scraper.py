@@ -18,7 +18,7 @@ import settings
 SCREENSHOTS_FOLDER = os.path.join(settings.CURRENT_DIRECTORY, "screenshots")
 
 
-def parse_liked_tweets():
+def parse_liked_tweets(username):
     if os.path.exists(SCREENSHOTS_FOLDER):
         [f.unlink() for f in Path(SCREENSHOTS_FOLDER).glob("*") if f.is_file()]
     else:
@@ -77,16 +77,6 @@ def parse_liked_tweets():
     create_tweet_files(tweets)
 
 
-def create_tweet_files(tweets):
-    if len(tweets) > 0:
-        with open("most_recent_liked_tweet.txt", "w") as f:
-            f.write(list(tweets)[0])
-
-        with open("recent_likes.json", "w+") as f:
-            result = json.dumps(tweets)
-            f.write(result)
-
-
 def login_to_twitter(username, password, otp_key):
     driver.get("https://twitter.com/")
 
@@ -142,6 +132,16 @@ def login_to_twitter(username, password, otp_key):
     )
 
 
+def create_tweet_files(tweets):
+    if len(tweets) > 0:
+        with open("most_recent_liked_tweet.txt", "w") as f:
+            f.write(list(tweets)[0])
+
+        with open("recent_likes.json", "w+") as f:
+            result = json.dumps(tweets)
+            f.write(result)
+
+
 if __name__ == "__main__":
     display = Display(visible=0, size=(600, 800))
     display.start()
@@ -153,6 +153,6 @@ if __name__ == "__main__":
     wait = WebDriverWait(driver, 20)
 
     login_to_twitter(settings.USERNAME, settings.PASSWORD, settings.OTP_KEY)
-    parse_liked_tweets()
+    parse_liked_tweets(settings.USERNAME)
 
     driver.close()
