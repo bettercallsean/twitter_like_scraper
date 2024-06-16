@@ -1,7 +1,8 @@
+#!/usr/bin/python3
 import json
 import os
 import time
-from pathlib import Path
+import datetime
 
 import pyotp
 from bs4 import BeautifulSoup
@@ -15,14 +16,17 @@ from pyvirtualdisplay import Display
 
 import settings
 
-SCREENSHOTS_FOLDER = os.path.join(settings.CURRENT_DIRECTORY, "screenshots")
+CURRENT_TIME = datetime.datetime.now()
+SCREENSHOTS_FOLDER = os.path.join(settings.CURRENT_DIRECTORY, "screenshots", f"{CURRENT_TIME:%d-%m-%Y}")
+LIKED_TWEETS_FOLDER = os.path.join(settings.CURRENT_DIRECTORY, "tweets")
 
 
-def parse_liked_tweets(username):
-    if os.path.exists(SCREENSHOTS_FOLDER):
-        [f.unlink() for f in Path(SCREENSHOTS_FOLDER).glob("*") if f.is_file()]
-    else:
+def parse_liked_tweets(username: str) -> None:
+    if not os.path.exists(SCREENSHOTS_FOLDER):
         os.mkdir(SCREENSHOTS_FOLDER)
+
+    if not os.path.exists(LIKED_TWEETS_FOLDER):
+        os.mkdir(LIKED_TWEETS_FOLDER)
 
     most_recent_liked_tweet = ""
     if os.path.exists("most_recent_liked_tweet.txt"):
@@ -77,7 +81,7 @@ def parse_liked_tweets(username):
     create_tweet_files(tweets)
 
 
-def login_to_twitter(username, password, otp_key):
+def login_to_twitter(username: str, password: str, otp_key: str) -> None:
     driver.get("https://twitter.com/")
 
     cookie_button = wait.until(
@@ -132,12 +136,12 @@ def login_to_twitter(username, password, otp_key):
     )
 
 
-def create_tweet_files(tweets):
+def create_tweet_files(tweets: dict) -> None:
     if len(tweets) > 0:
         with open("most_recent_liked_tweet.txt", "w") as f:
             f.write(list(tweets)[0])
 
-        with open("recent_likes.json", "w+") as f:
+        with open(f"{LIKED_TWEETS_FOLDER}/{CURRENT_TIME:%d-%m-%Y}.json", "w+") as f:
             result = json.dumps(tweets)
             f.write(result)
 
@@ -156,3 +160,4 @@ if __name__ == "__main__":
     parse_liked_tweets(settings.USERNAME)
 
     driver.close()
+    display.stop()
