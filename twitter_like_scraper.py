@@ -142,7 +142,7 @@ def create_tweet_files(tweets: dict) -> None:
 
 
 if __name__ == "__main__":
-    display = Display(visible=0, size=(600, 800))
+    display = Display(visible=0, size=(1200, 675))
     display.start()
 
     options = Options()
