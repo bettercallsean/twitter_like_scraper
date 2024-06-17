@@ -17,12 +17,15 @@ from pyvirtualdisplay import Display
 import settings
 
 CURRENT_TIME = datetime.datetime.now()
-LIKED_TWEETS_FOLDER = os.path.join(settings.CURRENT_DIRECTORY, "tweets", f"{CURRENT_TIME:%d-%m-%Y}")
+LIKED_TWEETS_FOLDER = os.path.join(
+    settings.CURRENT_DIRECTORY, "tweets", f"{CURRENT_TIME:%d-%m-%Y}"
+)
 MOST_RECENT_LIKED_TWEET_FILE = "most_recent_liked_tweet.txt"
+
 
 def parse_liked_tweets(username: str) -> None:
     if not os.path.exists(LIKED_TWEETS_FOLDER):
-        os.mkdir(LIKED_TWEETS_FOLDER)
+        os.makedirs(LIKED_TWEETS_FOLDER)
 
     most_recent_liked_tweet = ""
     if os.path.exists(MOST_RECENT_LIKED_TWEET_FILE):
@@ -77,11 +80,11 @@ def parse_liked_tweets(username: str) -> None:
 
 
 def login_to_twitter(username: str, password: str, otp_key: str) -> None:
-    driver.get("https://x.com/")
+    driver.get("https://twitter.com/")
 
     cookie_button = wait.until(
         EC.presence_of_all_elements_located(
-            (By.CSS_SELECTOR, 'button.r-18kxxzh:nth-child(2)')
+            (By.CSS_SELECTOR, "button.r-18kxxzh:nth-child(2)")
         )
     )
     cookie_button[0].click()
