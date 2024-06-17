@@ -17,22 +17,17 @@ from pyvirtualdisplay import Display
 import settings
 
 CURRENT_TIME = datetime.datetime.now()
-SCREENSHOTS_FOLDER = os.path.join(settings.CURRENT_DIRECTORY, "screenshots", f"{CURRENT_TIME:%d-%m-%Y}")
-LIKED_TWEETS_FOLDER = os.path.join(settings.CURRENT_DIRECTORY, "tweets")
-
+LIKED_TWEETS_FOLDER = os.path.join(settings.CURRENT_DIRECTORY, "tweets", f"{CURRENT_TIME:%d-%m-%Y}")
+MOST_RECENT_LIKED_TWEET_FILE = "most_recent_liked_tweet.txt"
 
 def parse_liked_tweets(username: str) -> None:
-    if not os.path.exists(SCREENSHOTS_FOLDER):
-        os.mkdir(SCREENSHOTS_FOLDER)
-
     if not os.path.exists(LIKED_TWEETS_FOLDER):
         os.mkdir(LIKED_TWEETS_FOLDER)
 
     most_recent_liked_tweet = ""
-    if os.path.exists("most_recent_liked_tweet.txt"):
-        with open("most_recent_liked_tweet.txt", "r") as f:
+    if os.path.exists(MOST_RECENT_LIKED_TWEET_FILE):
+        with open(MOST_RECENT_LIKED_TWEET_FILE, "r") as f:
             most_recent_liked_tweet = f.read()
-
 
     driver.get(f"https://twitter.com/{username}/likes")
 
@@ -69,7 +64,7 @@ def parse_liked_tweets(username: str) -> None:
                 most_recent_liked_tweet_found = True
                 break
 
-            tweet.screenshot(f"{SCREENSHOTS_FOLDER}/{tweet.id}.png")
+            tweet.screenshot(f"{LIKED_TWEETS_FOLDER}/{tweet.id}.png")
             time.sleep(1)
             tweets[tweet_link] = tweet.id
             last_stored_tweet_id = tweet.id
@@ -82,11 +77,11 @@ def parse_liked_tweets(username: str) -> None:
 
 
 def login_to_twitter(username: str, password: str, otp_key: str) -> None:
-    driver.get("https://twitter.com/")
+    driver.get("https://x.com/")
 
     cookie_button = wait.until(
         EC.presence_of_all_elements_located(
-            (By.XPATH, '//*[@id="layers"]/div/div[1]/div/div/div/div[2]/button[2]')
+            (By.CSS_SELECTOR, 'button.r-18kxxzh:nth-child(2)')
         )
     )
     cookie_button[0].click()
@@ -138,7 +133,7 @@ def login_to_twitter(username: str, password: str, otp_key: str) -> None:
 
 def create_tweet_files(tweets: dict) -> None:
     if len(tweets) > 0:
-        with open("most_recent_liked_tweet.txt", "w") as f:
+        with open(MOST_RECENT_LIKED_TWEET_FILE, "w") as f:
             f.write(list(tweets)[0])
 
         with open(f"{LIKED_TWEETS_FOLDER}/{CURRENT_TIME:%d-%m-%Y}.json", "w+") as f:
@@ -152,6 +147,7 @@ if __name__ == "__main__":
 
     options = Options()
     options.add_argument("-headless")
+    options.set_preference("network.cookie.cookieBehavior", 2)
     service = webdriver.FirefoxService(executable_path="/usr/local/bin/geckodriver")
     driver = webdriver.Firefox(service=service, options=options)
     wait = WebDriverWait(driver, 20)
