@@ -20,7 +20,7 @@ CURRENT_TIME = datetime.datetime.now()
 LIKED_TWEETS_FOLDER = os.path.join(
     settings.CURRENT_DIRECTORY, "tweets", f"{CURRENT_TIME:%d-%m-%Y}"
 )
-MOST_RECENT_LIKED_TWEET_FILE = "most_recent_liked_tweet.txt"
+MOST_RECENT_LIKED_TWEET_FILE = os.path.join(settings.CURRENT_DIRECTORY, "most_recent_liked_tweet.txt")
 
 
 def parse_liked_tweets(username: str) -> None:
