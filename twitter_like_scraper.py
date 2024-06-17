@@ -147,7 +147,6 @@ if __name__ == "__main__":
 
     options = Options()
     options.add_argument("-headless")
-    options.set_preference("network.cookie.cookieBehavior", 2)
     service = webdriver.FirefoxService(executable_path="/usr/local/bin/geckodriver")
     driver = webdriver.Firefox(service=service, options=options)
     wait = WebDriverWait(driver, 20)
