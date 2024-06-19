@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import json
 import os
 import time
@@ -20,7 +19,9 @@ CURRENT_TIME = datetime.datetime.now()
 LIKED_TWEETS_FOLDER = os.path.join(
     settings.CURRENT_DIRECTORY, "tweets", f"{CURRENT_TIME:%d-%m-%Y}"
 )
-MOST_RECENT_LIKED_TWEET_FILE = os.path.join(settings.CURRENT_DIRECTORY, "most_recent_liked_tweet.txt")
+MOST_RECENT_LIKED_TWEET_FILE = os.path.join(
+    settings.CURRENT_DIRECTORY, "most_recent_liked_tweet.txt"
+)
 
 
 def parse_liked_tweets(username: str) -> None:
@@ -33,6 +34,18 @@ def parse_liked_tweets(username: str) -> None:
             most_recent_liked_tweet = f.read()
 
     driver.get(f"https://twitter.com/{username}/likes")
+
+    name_header = wait.until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, ".r-1gn8etr"))
+    )
+
+    driver.execute_script(
+        """
+        var element = arguments[0];
+        element.parentNode.removeChild(element);
+        """,
+        name_header,
+    )
 
     tweets = wait.until(
         EC.presence_of_element_located(
