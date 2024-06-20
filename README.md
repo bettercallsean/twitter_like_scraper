@@ -7,6 +7,7 @@ Create a `creds.env` file in the root directory, with the following keys
 ```
 USERNAME="yourusername"
 PASSWORD="yourpassword"
+GECKODRIVER_LOCATION="/location/to/geckodriver"
 ```
 
 If you have two-factor authentication enabled on your account, add the following to the creds file as well
@@ -15,10 +16,15 @@ OTP_KEY="yourotpkey"
 ```
 You will need to get the OTP Secret key from whatever authenticator app you use.
 
+You'll need to download and install geckodriver from here https://github.com/mozilla/geckodriver/ and set `GECKODRIVER_LOCATION` to where you've got it installed.
+
 After you have created this file, run the following from the terminal
 ```
 pip install -r requirements.txt
 ```
+
+
+And replace 
 
 You can then run the script as you normally would either via the terminal or using an IDE.
 
