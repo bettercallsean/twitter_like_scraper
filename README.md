@@ -23,12 +23,9 @@ After you have created this file, run the following from the terminal
 pip install -r requirements.txt
 ```
 
-
-And replace 
-
 You can then run the script as you normally would either via the terminal or using an IDE.
 
-When you run the script for the first time, it will simply save the most recent liked tweet URL in `most_recent_liked_tweet.txt` and not any . 
+When you run the script for the first time, it will simply save the most recent liked tweet URL in `most_recent_liked_tweet.txt`.
 This is used as a base point for the next time the script runs, to see what tweets have been liked since this tweet.
 The script will update `most_recent_liked_tweet.txt` every time it runs with the most recent tweet.
 
