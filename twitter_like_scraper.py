@@ -163,6 +163,9 @@ if __name__ == "__main__":
 
     options = Options()
     options.add_argument("-headless")
+    options.preferences.update({
+        "javascript.enabled": True,
+    })
     service = webdriver.FirefoxService(executable_path=settings.GECKODRIVER_LOCATION)
     driver = webdriver.Firefox(service=service, options=options)
     wait = WebDriverWait(driver, 20)
