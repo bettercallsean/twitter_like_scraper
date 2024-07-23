@@ -80,6 +80,7 @@ def parse_liked_tweets(username: str) -> None:
                 most_recent_liked_tweet_found = True
                 break
 
+            time.sleep(1)
             tweet.screenshot(f"{LIKED_TWEETS_FOLDER}/{tweet.id}.png")
             time.sleep(1)
             tweets[tweet_link] = tweet.id
