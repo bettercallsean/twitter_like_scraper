@@ -12,6 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.options import Options
 from pyvirtualdisplay import Display
+from undetected_geckodriver import Firefox
 
 import settings
 
@@ -163,12 +164,12 @@ if __name__ == "__main__":
     display.start()
 
     options = Options()
-    options.add_argument("-headless")
+    # options.add_argument("-headless")
     options.preferences.update({
         "javascript.enabled": True,
     })
     service = webdriver.FirefoxService(executable_path=settings.GECKODRIVER_LOCATION)
-    driver = webdriver.Firefox(service=service, options=options)
+    driver = Firefox(service=service, options=options)
     wait = WebDriverWait(driver, 20)
 
     login_to_twitter(settings.USERNAME, settings.PASSWORD, settings.OTP_KEY)
